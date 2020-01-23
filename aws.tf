@@ -1,3 +1,4 @@
+  
 provider "aws" {
   assume_role {
     role_arn     = "arn:aws:iam::573329840855:role/AccessLyon"
@@ -15,10 +16,29 @@ provider "aws" {
 #}
 
 
+
+
 resource "aws_instance" "test-EC2-in-VPC" {
   ami                    = "ami-007fae589fdf6e955" #id of desired AMI
   instance_type          = "t2.small"
   subnet_id              = "subnet-0599b65bdbcc15355"
   key_name               = "SMA-KEY"
+  tags = {
+    Name = "EC2-test"
+  }
+
+  resource "aws_security_group" "allow_tls" {
+  name        = "allow_ssh"
+  description = "Allow ssh inbound traffic"
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "ssh"
+  }
+  tags = {
+    Name = "allow_all"
+  }
+}
 }
 
