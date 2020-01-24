@@ -224,7 +224,7 @@ USERDATA
 
 }
 
-resource "aws_launch_configuration" "demo" {
+resource "aws_launch_configuration" "eks-cluster" {
   associate_public_ip_address = true
   iam_instance_profile        = aws_iam_instance_profile.eks-node.name
   image_id                    = data.aws_ami.eks-worker.id
@@ -244,7 +244,7 @@ resource "aws_autoscaling_group" "eks-cluster" {
   max_size             = 2
   min_size             = 1
   name                 = "terraform-eks"
-  vpc_zone_identifier = [aws_subnet.demo.*.id]
+  vpc_zone_identifier = [aws_subnet.*.id]
 
   tag {
     key                 = "Name"
