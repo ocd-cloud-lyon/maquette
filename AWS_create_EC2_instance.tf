@@ -8,8 +8,8 @@ resource "aws_instance" "test-EC2-in-VPC" {
   }
 }
 
-output "aws_instance" {
-  value       = aws_instance.private_ip
+output "public_ip" {
+  value       = "${aws_instance.test-EC2-in-VPC.public_ip}"
   description = "The private IP address of the main server instance."
 }
 
