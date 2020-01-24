@@ -9,7 +9,7 @@ resource "aws_instance" "test-EC2-in-VPC" {
 }
 
 output "aws_instance" {
-  value       = aws_instance.server.private_ip
+  value       = aws_instance.private_ip
   description = "The private IP address of the main server instance."
 }
 
