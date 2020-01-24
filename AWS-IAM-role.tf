@@ -16,4 +16,5 @@ resource "aws_iam_role" "eks_iam_role" {
 }
 EOF
 #Sid = statement de la règle 
+  #Problèle de }
 }
