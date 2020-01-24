@@ -224,7 +224,7 @@ USERDATA
 
 }
 
-resource "aws_launch_configuration" "eks-cluster" {
+resource "aws_launch_configuration" "eks-node" {
   associate_public_ip_address = true
   iam_instance_profile        = aws_iam_instance_profile.eks-node.name
   image_id                    = data.aws_ami.eks-worker.id
