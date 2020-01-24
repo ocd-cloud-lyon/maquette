@@ -11,7 +11,6 @@ resource "aws_iam_role" "eks_iam_role" {
         "Service": "ec2.amazonaws.com"
       },
       "Effect": "Allow",
-      "Sid": "" 
     }
   ]
 }
