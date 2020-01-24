@@ -1,5 +1,5 @@
-resource "aws_iam_role" "EKS_IAM_role" {
-  name = "EKS_IAM_role"
+resource "aws_iam_role" "eks_iam_role" {
+  name = "eks_iam_role"
 
   assume_role_policy = <<EOF
 {
