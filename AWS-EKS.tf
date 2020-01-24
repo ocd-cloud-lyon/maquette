@@ -115,8 +115,8 @@ output "kubeconfig" {
   value = "${local.kubeconfig}"
 }
 
-resource "aws_iam_role" "eks-cluster" {
-  name = "terraform-eks-demo-cluster"
+resource "aws_iam_role" "eks-node" {
+  name = "eks-node"
 
   assume_role_policy = <<POLICY
 {
