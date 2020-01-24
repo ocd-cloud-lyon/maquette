@@ -135,7 +135,7 @@ POLICY
 
 }
 
-resource "aws_iam_role_policy_attachment" "eks-cluster-AmazonEKSClusterPolicy" {
+resource "aws_iam_role_policy_attachment" "eks-node-AmazonEKSClusterPolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
   role       = aws_iam_role.eks-node.name
 }
