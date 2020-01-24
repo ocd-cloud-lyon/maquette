@@ -8,6 +8,7 @@ resource "aws_instance" "test-EC2-in-VPC" {
   }
 }
 
+#Configuration des Outputs
 output "public_ip" {
   value       = "${aws_instance.test-EC2-in-VPC.public_ip}"
   description = "The private IP address of the main server instance."
