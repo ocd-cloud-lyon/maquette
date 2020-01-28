@@ -33,7 +33,7 @@ resource "aws_iam_role_policy_attachment" "eks-cluster-AmazonEKSClusterPolicy" {
 
 resource "aws_iam_role_policy_attachment" "eks-cluster-AmazonEKSServicePolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSServicePolicy"
-  role       = "${aws_iam_role.eks-node.name}"
+  role       = aws_iam_role.eks-node.name
 }
 
 resource "aws_security_group" "eks-cluster" {
@@ -230,7 +230,7 @@ resource "aws_launch_configuration" "eks-cluster" {
   instance_type               = "m4.large"
   name_prefix                 = "terraform-eks"
   security_groups  = [aws_security_group.eks-cluster.id]
-  user_data_base64 = base64encode(local.eks-cluster)
+  #user_data_base64 = base64encode(local.eks-cluster)
 
   lifecycle {
     create_before_destroy = true
