@@ -10,7 +10,7 @@ variable "cluster-name" {
 resource "aws_iam_role" "eks-cluster" {
   name = "eks-cluster"
 
-  assume_role_policy = <<POLICY
+  assume_role_policy = <<EOF
 {
   "Version": "2020-01-24",
   "Statement": [
@@ -67,12 +67,12 @@ resource "aws_security_group_rule" "eks-cluster-ingress-workstation-https" {
 }
 
 resource "aws_eks_cluster" "eks-cluster" {
-  name            = "${var.cluster-name}"
-  role_arn        = "${aws_iam_role.eks-node.arn}"
+  name            = var.cluster-name
+  role_arn        = aws_iam_role.eks-node.arn
 
   vpc_config {
     security_group_ids = ["${aws_security_group.eks-cluster.id}"]
-    subnet_ids         = ["vpc-03cca642ef84627e2"]
+    subnet_ids         = vpc-03cca642ef84627e2
   }
 
   depends_on = [
