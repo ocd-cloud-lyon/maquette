@@ -61,14 +61,14 @@ resource "aws_security_group_rule" "eks-cluster-ingress-workstation-https" {
   description       = "Allow workstation to communicate with the cluster API Server"
   from_port         = 443
   protocol          = "tcp"
-  security_group_id = "${aws_security_group.eks-cluster.id}"
+  security_group_id = aws_security_group.eks-cluster.id
   to_port           = 443
   type              = "ingress"
 }
 
 resource "aws_eks_cluster" "eks-cluster" {
-  name            = "${var.cluster-name}"
-  role_arn        = "${aws_iam_role.eks-node.arn}"
+  name            = var.cluster-name
+  role_arn        = aws_iam_role.eks-node.arn
 
   vpc_config {
     security_group_ids = ["${aws_security_group.eks-cluster.id}"]
@@ -243,7 +243,7 @@ resource "aws_autoscaling_group" "eks-cluster" {
   max_size             = 2
   min_size             = 1
   name                 = "terraform-eks"
-  vpc_zone_identifier = [aws_subnet.*.id]
+  #vpc_zone_identifier = [aws_subnet.*.id]
 
   tag {
     key                 = "Name"
