@@ -10,7 +10,7 @@ variable "cluster-name" {
 resource "aws_iam_role" "eks-cluster" {
   name = "eks-cluster"
 
-  assume_role_policy = <<EOF
+  assume_role_policy = <<POLICY
 {
   "Version": "2020-01-24",
   "Statement": [
@@ -33,7 +33,7 @@ resource "aws_iam_role_policy_attachment" "eks-cluster-AmazonEKSClusterPolicy" {
 
 resource "aws_iam_role_policy_attachment" "eks-cluster-AmazonEKSServicePolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSServicePolicy"
-  role       = aws_iam_role.eks-node.name
+  role       = "${aws_iam_role.eks-node.name}"
 }
 
 resource "aws_security_group" "eks-cluster" {
@@ -61,18 +61,18 @@ resource "aws_security_group_rule" "eks-cluster-ingress-workstation-https" {
   description       = "Allow workstation to communicate with the cluster API Server"
   from_port         = 443
   protocol          = "tcp"
-  security_group_id = aws_security_group.eks-cluster.id
+  security_group_id = "${aws_security_group.eks-cluster.id}"
   to_port           = 443
   type              = "ingress"
 }
 
 resource "aws_eks_cluster" "eks-cluster" {
-  name            = var.cluster-name
-  role_arn        = aws_iam_role.eks-node.arn
+  name            = "${var.cluster-name}"
+  role_arn        = "${aws_iam_role.eks-node.arn}"
 
   vpc_config {
     security_group_ids = ["${aws_security_group.eks-cluster.id}"]
-    subnet_ids         = vpc-03cca642ef84627e2
+    subnet_ids         = ["vpc-03cca642ef84627e2"]
   }
 
   depends_on = [
@@ -230,7 +230,7 @@ resource "aws_launch_configuration" "eks-cluster" {
   instance_type               = "m4.large"
   name_prefix                 = "terraform-eks"
   security_groups  = [aws_security_group.eks-cluster.id]
-  #user_data_base64 = base64encode(local.eks-cluster)
+  user_data_base64 = base64encode(local.eks-cluster)
 
   lifecycle {
     create_before_destroy = true
@@ -243,7 +243,7 @@ resource "aws_autoscaling_group" "eks-cluster" {
   max_size             = 2
   min_size             = 1
   name                 = "terraform-eks"
- # vpc_zone_identifier = [aws_subnet.*.id]
+  vpc_zone_identifier = [aws_subnet.*.id]
 
   tag {
     key                 = "Name"
