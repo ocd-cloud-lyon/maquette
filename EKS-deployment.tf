@@ -28,7 +28,7 @@ POLICY
 
 resource "aws_iam_role_policy_attachment" "eks-cluster-AmazonEKSClusterPolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
-  role       = "${aws_iam_role.eks-node.name}"
+  role       = aws_iam_role.eks-node.name
 }
 
 resource "aws_iam_role_policy_attachment" "eks-cluster-AmazonEKSServicePolicy" {
@@ -76,8 +76,8 @@ resource "aws_eks_cluster" "eks-cluster" {
   }
 
   depends_on = [
-    "aws_iam_role_policy_attachment.eks-cluster-AmazonEKSClusterPolicy",
-    "aws_iam_role_policy_attachment.eks-cluster-AmazonEKSServicePolicy",
+    aws_iam_role_policy_attachment.eks-cluster-AmazonEKSClusterPolicy,
+    aws_iam_role_policy_attachment.eks-cluster-AmazonEKSServicePolicy,
   ]
 }
 #Partie configuration de notre cluster Kubernetes
@@ -230,7 +230,7 @@ resource "aws_launch_configuration" "eks-cluster" {
   instance_type               = "m4.large"
   name_prefix                 = "terraform-eks"
   security_groups  = [aws_security_group.eks-cluster.id]
-  user_data_base64 = base64encode(local.eks-cluster-userdata)
+  user_data_base64 = base64encode(local.eks-cluster)
 
   lifecycle {
     create_before_destroy = true
