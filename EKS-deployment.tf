@@ -33,7 +33,7 @@ resource "aws_iam_role_policy_attachment" "eks-cluster-AmazonEKSClusterPolicy" {
 
 resource "aws_iam_role_policy_attachment" "eks-cluster-AmazonEKSServicePolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSServicePolicy"
-  role       = "${aws_iam_role.eks-node.name}"
+  role       = aws_iam_role.eks-node.name
 }
 
 resource "aws_security_group" "eks-cluster" {
@@ -61,7 +61,7 @@ resource "aws_security_group_rule" "eks-cluster-ingress-workstation-https" {
   description       = "Allow workstation to communicate with the cluster API Server"
   from_port         = 443
   protocol          = "tcp"
-  security_group_id = "${aws_security_group.eks-cluster.id}"
+  security_group_id = aws_security_group.eks-cluster.id
   to_port           = 443
   type              = "ingress"
 }
@@ -243,7 +243,7 @@ resource "aws_autoscaling_group" "eks-cluster" {
   max_size             = 2
   min_size             = 1
   name                 = "terraform-eks"
-  vpc_zone_identifier = [aws_subnet.*.id]
+ # vpc_zone_identifier = [aws_subnet.*.id]
 
   tag {
     key                 = "Name"
