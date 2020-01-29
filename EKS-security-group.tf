@@ -9,6 +9,6 @@ resource "aws_security_group" "tf-eks-master" {
         cidr_blocks = ["0.0.0.0/0"]
       }
       tags {
-        "Name" : "terraform-eks"
+        Name = "terraform-eks"
       }
 }
