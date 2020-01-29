@@ -8,7 +8,7 @@ variable "cluster-name" {
 
 #Mise en place du rôle IAM directement lié au service EKS
 resource "aws_iam_role" "eks-cluster" {
-  name = "eks-cluster"
+  name = "iam-eks-cluster"
 
   assume_role_policy = <<POLICY
 {
@@ -72,7 +72,7 @@ resource "aws_eks_cluster" "eks-cluster" {
 
   vpc_config {
     security_group_ids = ["${aws_security_group.eks-cluster.id}"]
-    subnet_ids         = ["vpc-03cca642ef84627e2"]
+    subnet_ids         = "vpc-03cca642ef84627e2"
   }
 
   depends_on = [
