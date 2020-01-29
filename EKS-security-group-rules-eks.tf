@@ -1,5 +1,5 @@
 resource "aws_security_group_rule" "tf-eks-master-ingress-workstation-https" {
-  cidr_blocks       = ["${var.accessing_computer_ip}/32"]
+  cidr_blocks       = ["0.0.0.O/0"]
   description       = "Allow workstation to communicate with the cluster API Server."
   from_port         = 443
   protocol          = "tcp"
@@ -8,7 +8,7 @@ resource "aws_security_group_rule" "tf-eks-master-ingress-workstation-https" {
   type              = "ingress"
 }
 resource "aws_security_group_rule" "tf-eks-node-ingress-workstation-https" {
-  cidr_blocks       = ["${var.accessing_computer_ip}/32"]
+  cidr_blocks       = ["0.0.0.0/0"]
   description       = "Allow workstation to communicate with the Kubernetes nodes directly."
   from_port         = 22
   protocol          = "tcp"
