@@ -12,7 +12,7 @@ resource "aws_security_group_rule" "tf-eks-node-ingress-workstation-https" {
   description       = "Allow workstation to communicate with the Kubernetes nodes directly."
   from_port         = 22
   protocol          = "tcp"
-  security_group_id = aws_security_group.tf-eks-node.id
+  security_group_id = aws_security_group.tf-eks-nodes.id
   to_port           = 22
   type              = "ingress"
 }
