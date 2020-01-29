@@ -23,3 +23,4 @@ resource "aws_iam_role_policy_attachment" "tf-cluster-AmazonEKSClusterPolicy" {
 resource "aws_iam_role_policy_attachment" "tf-cluster-AmazonEKSServicePolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSServicePolicy"
   role       = aws_iam_role.tf-eks-master.name
+}
