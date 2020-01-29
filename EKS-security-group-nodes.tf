@@ -1,4 +1,4 @@
-resource "aws_security_group" "tf-eks-nodes" {
+resource "aws_security_group" "tf-eks-node" {
     name        = "terraform-eks-nodes"
     description = "Security group for all nodes"
     vpc_id      = "vpc-03cca642ef84627e2"
