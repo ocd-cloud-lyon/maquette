@@ -204,7 +204,7 @@ data "aws_ami" "eks-worker" {
    owners      = ["573329840855"] # Amazon EKS AMI Account ID
  }
 
- # This data source is included for ease of sample architecture deployment
+# This data source is included for ease of sample architecture deployment
 # and can be swapped out as necessary.
 data "aws_region" "current" {
 }
