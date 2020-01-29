@@ -46,7 +46,7 @@ resource "aws_security_group_rule" "tf-eks-cluster-ingress-node-https" {
   to_port                  = 443
   type                     = "ingress"
 }
-resource "aws_security_group_rule" "tf-eks-node-ingress-master" {<br />
+resource "aws_security_group_rule" "tf-eks-node-ingress-master" {
   description              = "Allow cluster control to receive communication from the worker Kubelets"
   from_port                = 443
   protocol                 = "tcp"
