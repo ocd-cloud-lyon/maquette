@@ -35,3 +35,23 @@ resource "aws_launch_configuration" "tf_eks" {
     create_before_destroy = true
   }
 }
+resource "aws_autoscaling_group" "tf_eks" {
+  desired_capacity     = "2"
+  launch_configuration = "${aws_launch_configuration.tf_eks.id}"
+  max_size             = "3"
+  min_size             = "1"
+  name                 = "terraform-tf-eks"
+  vpc_zone_identifier  = ["${var.tf-eks_app_subnet_ids}"]
+ 
+  tag {
+    key                 = "Name"
+    value               = "terraform-tf-eks"
+    propagate_at_launch = true
+  }
+ 
+  tag {
+    key                 = "kubernetes.io/cluster/example"
+    value               = "owned"
+    propagate_at_launch = true
+  }
+}
