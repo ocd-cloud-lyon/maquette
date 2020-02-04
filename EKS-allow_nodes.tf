@@ -15,15 +15,15 @@ resource "kubernetes_config_map" "aws_auth" {
     name = "aws-auth" 
     namespace = "kube-system" 
   } 
-  data { 
-    mapRoles = <<EOF  
-- role_arn: ${aws_iam_role.tf-eks-node.arn} 
-  username: system:node:{{EC2PrivateDNSName}} 
-  groups: 
-    - system:bootstrappers 
-    - system:nodes 
-    EOF
-  } 
+data { 
+  mapRoles = <<EOF  
+  - role_arn: ${aws_iam_role.tf-eks-node.arn} 
+    username: system:node:{{EC2PrivateDNSName}} 
+    groups: 
+      - system:bootstrappers 
+      - system:nodes 
+      EOF
+    } 
   depends_on = [ 
     "aws_eks_cluster.tf_eks"  ] 
-}
+ }
