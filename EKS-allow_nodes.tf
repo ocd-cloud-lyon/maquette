@@ -27,3 +27,4 @@ data {
   depends_on = [ 
     "aws_eks_cluster.tf_eks"  ] 
  }
+
