@@ -1,9 +1,20 @@
-data "aws_ami" "eks-worker-node" {
-   filter {
-     name   = "name"
-     values = ["amazon-eks-node-${aws_eks_cluster.eks.version}-v*"]
-   }
+resource "aws_autoscaling_group" "demo" {
+  desired_capacity     = 2
+  launch_configuration = aws_launch_configuration.demo.id
+  max_size             = 2
+  min_size             = 1
+  name                 = "terraform-eks-demo"
+  vpc_zone_identifier = [aws_subnet.demo.*.id]
 
-   most_recent = true
-   owners      = ["573329840855"] # Amazon EKS AMI Account ID
- }
+  tag {
+    key                 = "Name"
+    value               = "terraform-eks-demo"
+    propagate_at_launch = true
+  }
+
+  tag {
+    key                 = "kubernetes.io/cluster/${var.cluster-name}"
+    value               = "owned"
+    propagate_at_launch = true
+  }
+}
