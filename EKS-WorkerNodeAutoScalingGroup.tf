@@ -22,14 +22,14 @@ locals {
   eks-worker-node-userdata = <<USERDATA
 #!/bin/bash
 set -o xtrace
-/etc/eks/bootstrap.sh --apiserver-endpoint '${aws_eks_cluster.eks.endpoint}' --b64-cluster-ca '${aws_eks_cluster. eks.certificate_authority[0].data}' '${var.cluster-name}'
+/etc/eks/bootstrap.sh --apiserver-endpoint '${aws_eks_cluster.eks.endpoint}' --b64-cluster-ca '${aws_eks_cluster.eks.certificate_authority[0].data}' '${var.cluster-name}'
 USERDATA
 
 }
 
 resource "aws_launch_configuration" "eks-worker-node" {
   associate_public_ip_address = true
-  iam_instance_profile        = aws_iam_instance_profile.eks-cluster.name
+  iam_instance_profile        = aws_iam_instance_profile.eks-wnode.name
   image_id                    = data.aws_ami.eks-worker-node.id
   instance_type               = "m4.large"
   name_prefix                 = "terraform-eks"
