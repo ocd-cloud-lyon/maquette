@@ -29,12 +29,12 @@ USERDATA
 
 resource "aws_launch_configuration" "eks-worker-node" {
   associate_public_ip_address = true
-  iam_instance_profile        = aws_iam_instance_profile.eks-worker-node.name
+  iam_instance_profile        = aws_iam_instance_profile.eks-cluster.name
   image_id                    = data.aws_ami.eks-worker-node.id
   instance_type               = "m4.large"
   name_prefix                 = "terraform-eks"
   security_groups  = [aws_security_group.worker-node.id]
-  user_data_base64 = base64encode(local.worker-node-userdata)
+  user_data_base64 = base64encode(local.eks-worker-node-userdata)
 
   lifecycle {
     create_before_destroy = true
