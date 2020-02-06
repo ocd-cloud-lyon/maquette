@@ -1,5 +1,5 @@
 resource "aws_iam_role" "master-node" {
-  name = "terraform-eks-cluster"
+  name = "terraform-eks-master-cluster"
 
   assume_role_policy = <<POLICY
 {
@@ -17,13 +17,12 @@ resource "aws_iam_role" "master-node" {
 POLICY
 }
 
-resource "aws_iam_role_policy_attachment" "eks-cluster-AmazonEKSClusterPolicy" {
+resource "aws_iam_role_policy_attachment" "eks-cluster-master-AmazonEKSClusterPolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
   role       = "${aws_iam_role.master-node.name}"
 }
 
-resource "aws_iam_role_policy_attachment" "eks-cluster-AmazonEKSServicePolicy" {
+resource "aws_iam_role_policy_attachment" "eks-cluster-master-AmazonEKSServicePolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSServicePolicy"
   role       = "${aws_iam_role.master-node.name}"
 }
-
