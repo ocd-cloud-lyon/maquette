@@ -19,7 +19,7 @@ data "aws_region" "current" {
 # information into the AutoScaling Launch Configuration.
 # More information: https://docs.aws.amazon.com/eks/latest/userguide/launch-workers.html
 locals {
-  demo-node-userdata = <<USERDATA
+  eks-worker-node-userdata = <<USERDATA
 #!/bin/bash
 set -o xtrace
 /etc/eks/bootstrap.sh --apiserver-endpoint '${aws_eks_cluster.eks.endpoint}' --b64-cluster-ca '${aws_eks_cluster. eks.certificate_authority[0].data}' '${var.cluster-name}'
