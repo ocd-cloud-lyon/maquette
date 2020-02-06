@@ -1,4 +1,4 @@
-resource "aws_eks_cluster" "demo" {
+resource "aws_eks_cluster" "eks" {
   name            = "${var.cluster-name}"
   role_arn        = "${aws_iam_role.master-node.arn}"
 
