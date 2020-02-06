@@ -26,3 +26,4 @@ resource "aws_iam_role_policy_attachment" "eks-cluster-master-AmazonEKSServicePo
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSServicePolicy"
   role       = "${aws_iam_role.master-node.name}"
 }
+
