@@ -43,10 +43,10 @@ resource "aws_launch_configuration" "eks-worker-node" {
 
 resource "aws_autoscaling_group" "eks-worker-node" {
   desired_capacity     = 2
-  launch_configuration = aws_launch_configuration.demo.id
+  launch_configuration = aws_launch_configuration.eks-worker-node.id
   max_size             = 2
   min_size             = 1
-  name                 = "terraform-eks-demo"
+  name                 = "terraform-eks"
   #vpc_zone_identifier = [aws_subnet.demo.*.id]
 
   tag {
