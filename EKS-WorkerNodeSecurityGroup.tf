@@ -34,3 +34,4 @@ resource "aws_security_group_rule" "worker-node-ingress-cluster" {
   source_security_group_id = aws_security_group.eks-cluster.id
   to_port                  = 65535
   type                     = "ingress"
+  }
