@@ -9,7 +9,7 @@ metadata:
   namespace: kube-system
 data:
   mapRoles: |
-    - rolearn = "terraform-eks-cluster"
+    - rolearn: "terraform-eks-cluster"
       username: system:node:{{EC2PrivateDNSName}}
       groups:
         - system:bootstrappers
