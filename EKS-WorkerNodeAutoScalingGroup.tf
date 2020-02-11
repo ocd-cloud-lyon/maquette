@@ -1,4 +1,4 @@
-data "aws_ami" "eks-cluster" {
+data "aws_ami" "worker-node" {
    filter {
      name   = "name"
      values = ["amazon-eks-node-${aws_eks_cluster.eks.version}-v*"]
@@ -34,7 +34,7 @@ resource "aws_launch_configuration" "eks-worker-node" {
   instance_type               = "m4.large"
   name_prefix                 = "terraform-eks"
   security_groups  = [aws_security_group.worker-node.id]
-  user_data_base64 = base64encode(local.eks-worker-node-userdata)
+  user_data_base64 = base64encode(local.worker-node-userdata)
 
   lifecycle {
     create_before_destroy = true
