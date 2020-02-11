@@ -34,7 +34,7 @@ resource "aws_launch_configuration" "eks-worker-node" {
   instance_type               = "m4.large"
   name_prefix                 = "terraform-eks"
   security_groups  = [aws_security_group.worker-node.id]
-  user_data_base64 = base64encode(local.eks-worker-node-userdata)
+  user_data_base64 = base64encode(local.worker-node-userdata)
 
   lifecycle {
     create_before_destroy = true
