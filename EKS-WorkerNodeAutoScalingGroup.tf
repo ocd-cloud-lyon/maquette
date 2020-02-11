@@ -29,7 +29,7 @@ USERDATA
 
 resource "aws_launch_configuration" "eks-worker-node" {
   associate_public_ip_address = true
-  iam_instance_profile        = aws_iam_instance_profile.eks-cluster.name
+  iam_instance_profile        = aws_iam_instance_profile.terraform-eks-cluster.name
   image_id                    = data.aws_ami.eks-worker-node.id
   instance_type               = "m4.large"
   name_prefix                 = "terraform-eks"
