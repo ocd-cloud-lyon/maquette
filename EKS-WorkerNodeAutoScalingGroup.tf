@@ -1,6 +1,6 @@
 data "aws_ami" "worker" {
    filter {
-     name   = "worker"
+     name   = "name"
      values = ["amazon-eks-node-${aws_eks_cluster.eks.version}-v*"]
    }
 
