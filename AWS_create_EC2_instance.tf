@@ -1,7 +1,7 @@
 resource "aws_instance" "test-EC2" {
-  ami                    = "ami-007fae589fdf6e955" #id of desired AMI
+  ami                    = "ami-0b248d53709a335ce" #id of desired AMI
   instance_type          = "t2.small"
-  subnet_id              = "subnet-0599b65bdbcc15355"
+  subnet_id              = "subnet-0c187777047b53659"
   key_name               = "SMA-KEY"
   tags = {
     Name = "EC2-test"
