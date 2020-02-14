@@ -1,4 +1,4 @@
-data "aws_ami" "worker" {
+data "aws_ami" "eks-worker-node" {
    filter {
      name   = "name"
      values = ["amazon-eks-node-${aws_eks_cluster.eks.version}-v*"]
