@@ -31,7 +31,7 @@ resource "aws_launch_configuration" "eks-worker-node" {
   associate_public_ip_address = true
   iam_instance_profile        = "terraform-eks-cluster"
   image_id                    = data.aws_ami.eks-worker-node.id
-  instance_type               = "m4.large"
+  instance_type               = "t2.small"
   name_prefix                 = "terraform-eks"
   security_groups  = [aws_security_group.worker-node.id]
   user_data_base64 = base64encode(local.eks-worker-node-userdata)
