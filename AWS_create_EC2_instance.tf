@@ -10,7 +10,7 @@ resource "aws_instance" "EKS-worker-01" {
 
 #Configuration des Outputs
 output "public_ip" {
-  value       = "${aws_instance.test-EC2.public_ip}"
+  value       = "${aws_instance.EKS-worker-01.public_ip}"
   description = "The private IP address of the main server instance."
 }
 
