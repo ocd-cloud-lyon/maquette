@@ -14,8 +14,6 @@ spec:
     spec:
       containers:
         - name: hello-you
-          image: "{{ .Values.image.repository }}:{{ .Values.image.version }}"
+          image: "{{ .Values.image.repository }}: $BUILD_NUMBER"
           ports:
             - containerPort: 8000
-      imagePullSecrets:
-         - name: eu-west-3-ecr-registry
