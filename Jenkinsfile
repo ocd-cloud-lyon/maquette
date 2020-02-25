@@ -87,7 +87,7 @@
 				 // deploiment en un coup dans le namespace NameSpace
 				 //sh ("/usr/local/bin/helm upgrade --install ${NomProjet} ./hello-you --namespace ${NameSpace} --set image.version=${BUILD_NUMBER}")
 			 }*/
-			 kubernetesDeploy configs: 'test-deploy.yaml', kubeConfig: [path: ''], kubeconfigId: 'K8S-config', secretName: '', ssh: [sshCredentialsId: '*', sshServer: ''], textCredentials: [certificateAuthorityData: '', clientCertificateData: '', clientKeyData: '', serverUrl: 'https://']
+			 kubernetesDeploy configs: 'test-deploy.yaml', kubeConfig: [path: ''], kubeconfigId: 'K8S-config', secretName: 'ecr:eu-west-3:aws-ecr-credential', ssh: [sshCredentialsId: '*', sshServer: ''], textCredentials: [certificateAuthorityData: '', clientCertificateData: '', clientKeyData: '', serverUrl: 'https://']
 		 }
 
         }
