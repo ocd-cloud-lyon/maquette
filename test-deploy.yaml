@@ -17,3 +17,5 @@ spec:
           image: "{{ .Values.image.repository }}: $BUILD_NUMBER"
           ports:
             - containerPort: 8000
+     imagePullSecrets:
+        - name: $KUBERNETES_SECRET_NAME
