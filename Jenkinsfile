@@ -30,7 +30,7 @@
 	registry = "https://573329840855.dkr.ecr.eu-west-3.amazonaws.com"
         //registryCredential = 'docker-hub-credentials'
 	registryCredential = 'ecr:eu-west-3:aws-ecr-credential'
-	KUBERNETES_SECRET_NAME = registryCredential
+	env.KUBERNETES_SECRET_NAME = registryCredential
         dockerImage = ''
         NomProjet = 'hello-you'
         NameSpace = 'hello-you-ns'
@@ -81,12 +81,13 @@
         }
          stage('deploy') {
 		 steps {
-			 script {
+			 /*script {
 				 // deploiment en un coup dans le namespace default
 				 sh ("/usr/local/bin/helm upgrade --install ${NomProjet} ./hello-you --set image.version=${BUILD_NUMBER}")
 				 // deploiment en un coup dans le namespace NameSpace
 				 //sh ("/usr/local/bin/helm upgrade --install ${NomProjet} ./hello-you --namespace ${NameSpace} --set image.version=${BUILD_NUMBER}")
-			 }
+			 }*/
+			 kubernetesDeploy configs: 'test-deploy.yaml', kubeConfig: [path: ''], kubeconfigId: 'K8S-config', secretName: '', ssh: [sshCredentialsId: '*', sshServer: ''], textCredentials: [certificateAuthorityData: '', clientCertificateData: '', clientKeyData: '', serverUrl: 'https://']
 		 }
 
         }
