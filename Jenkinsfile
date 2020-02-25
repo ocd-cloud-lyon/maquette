@@ -61,7 +61,7 @@
 	
 	stage('Scan image'){
 		steps{
-      			aquaMicroscanner imageName: 'ocd-cloud-lyon', notCompliesCmd: '', onDisallowed: 'ignore', outputFormat: 'html'
+      			//aquaMicroscanner imageName: 'ocd-cloud-lyon', notCompliesCmd: '', onDisallowed: 'ignore', outputFormat: 'html'
 			//aqua customFlags: '', hideBase: false, hostedImage: '', localImage: 'sma-maquette', locationType: 'local', notCompliesCmd: '', onDisallowed: 'ignore', policies: '', register: false, registry: '', showNegligible: false
 		}
         }
