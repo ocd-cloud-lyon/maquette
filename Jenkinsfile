@@ -59,12 +59,12 @@
           }
         }
 	
-	stage('Scan image'){
+	/*stage('Scan image'){
 		steps{
       			//aquaMicroscanner imageName: 'ocd-cloud-lyon', notCompliesCmd: '', onDisallowed: 'ignore', outputFormat: 'html'
 			//aqua customFlags: '', hideBase: false, hostedImage: '', localImage: 'sma-maquette', locationType: 'local', notCompliesCmd: '', onDisallowed: 'ignore', policies: '', register: false, registry: '', showNegligible: false
 		}
-        }
+        }*/
     
         stage('Push Image') {
           steps{
