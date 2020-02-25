@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-you-deploy
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hello-you
+  template:
+    metadata:
+      labels:
+        app: hello-you
+    spec:
+      containers:
+        - name: hello-you
+          image: "{{ .Values.image.repository }}:{{ .Values.image.version }}"
+          ports:
+            - containerPort: 8000
+      imagePullSecrets:
+         - name: eu-west-3-ecr-registry
