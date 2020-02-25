@@ -30,6 +30,7 @@
 	registry = "https://573329840855.dkr.ecr.eu-west-3.amazonaws.com"
         //registryCredential = 'docker-hub-credentials'
 	registryCredential = 'ecr:eu-west-3:aws-ecr-credential'
+	KUBERNETES_SECRET_NAME = registryCredential
         dockerImage = ''
         NomProjet = 'hello-you'
         NameSpace = 'hello-you-ns'
