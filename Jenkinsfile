@@ -27,7 +27,7 @@
      // Some global default variables
     environment {
         //registry = "bvarnet/maquette-v1-dev"
-	registry = "https://571253107823.dkr.ecr.eu-west-3.amazonaws.com"
+	registry = "https://573329840855.dkr.ecr.eu-west-3.amazonaws.com"
         //registryCredential = 'docker-hub-credentials'
 	registryCredential = 'ecr:eu-west-3:aws-ecr-credential'
         dockerImage = ''
@@ -44,7 +44,8 @@
          stage('Clone repository') {
             /* Let's make sure we have the repository cloned to our workspace */
              steps {
-                checkout scm
+                //checkout scm
+		git credentialsId: 'github-credential', url: 'https://github.com/ocd-cloud-lyon/maquette/'
              }
 
         }
@@ -53,14 +54,14 @@
           steps{
             script {
               //dockerImage = docker.build registry + ":$BUILD_NUMBER"
-		docker.build('sma-maquette')
+		docker.build('ocd-cloud-lyon')
             }
           }
         }
 	
 	stage('Scan image'){
 		steps{
-      			aquaMicroscanner imageName: 'sma-maquette', notCompliesCmd: '', onDisallowed: 'ignore', outputFormat: 'html'
+      			aquaMicroscanner imageName: 'ocd-cloud-lyon', notCompliesCmd: '', onDisallowed: 'ignore', outputFormat: 'html'
 			//aqua customFlags: '', hideBase: false, hostedImage: '', localImage: 'sma-maquette', locationType: 'local', notCompliesCmd: '', onDisallowed: 'ignore', policies: '', register: false, registry: '', showNegligible: false
 		}
         }
@@ -71,8 +72,8 @@
               //docker.withRegistry( '', registryCredential ) {
               //  dockerImage.push()
 		docker.withRegistry(registry, registryCredential) {
-    		docker.image('sma-maquette').push('latest')
-		docker.image('sma-maquette').push("${env.BUILD_NUMBER}")
+    		docker.image('ocd-cloud-lyon').push('latest')
+		docker.image('ocd-cloud-lyon').push("${env.BUILD_NUMBER}")
               }
             }
           }
