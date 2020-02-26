@@ -17,5 +17,12 @@ spec:
           image: 573329840855.dkr.ecr.eu-west-3.amazonaws.com/ocd-cloud-lyon:$BUILD_NUMBER
           ports:
             - containerPort: 8000
-      imagePullSecrets:
-        - name: $KUBERNETES_SECRET_NAME
+kind: Service
+metadata:
+  name: hello-you-svc
+spec:
+  selector:
+    app: hello-you
+  ports:
+    - protocol: TCP
+      port: 8000
