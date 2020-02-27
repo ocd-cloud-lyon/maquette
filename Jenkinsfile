@@ -96,5 +96,10 @@
 		 }
 
         }
+	stage ('Publish_prisma'){
+		steps{
+			twistlockPublish ca: '', cert: '', dockerAddress: 'unix:///var/run/docker.sock', image: 'ocd-cloud-lyon', key: '', logLevel: 'true', timeout: 10
+		}
+	}
     }
 }
