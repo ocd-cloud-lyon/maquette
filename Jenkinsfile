@@ -59,7 +59,12 @@
           }
         }
 	
-	/*stage('Scan image'){
+	stage ('Scan_prisma'){
+		steps{
+			twistlockScan ca: '', cert: '', compliancePolicy: 'critical', containerized: false, dockerAddress: 'unix:///var/run/docker.sock', gracePeriodDays: 0, ignoreImageBuildTime: false, image: 'ocd-cloud-lyon', key: '', logLevel: 'true', policy: 'critical', requirePackageUpdate: false, timeout: 10
+		}
+	}
+	     /*stage('Scan image'){
 		steps{
       			//aquaMicroscanner imageName: 'ocd-cloud-lyon', notCompliesCmd: '', onDisallowed: 'ignore', outputFormat: 'html'
 			//aqua customFlags: '', hideBase: false, hostedImage: '', localImage: 'sma-maquette', locationType: 'local', notCompliesCmd: '', onDisallowed: 'ignore', policies: '', register: false, registry: '', showNegligible: false
