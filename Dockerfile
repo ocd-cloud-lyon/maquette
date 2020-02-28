@@ -2,6 +2,9 @@
 FROM php:7.1-apache
 COPY src/ /var/www/html/
 
+#mise à jour des paquets
+RUN apt-get update -y
+
 # set maintainer
 LABEL maintainer "ocd-cloud-lyon"
 
