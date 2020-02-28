@@ -9,5 +9,5 @@ spec:
     app: hello-you
   ports:
     - protocol: TCP
-      port: 8000
+      port: 80
   type: LoadBalancer
