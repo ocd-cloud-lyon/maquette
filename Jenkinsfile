@@ -67,11 +67,11 @@
 	}*/
 	     
 	     
-	/*stage ('Scan_prisma'){
+	stage ('Scan_prisma'){
 		steps{
 			twistlockScan ca: '', cert: '', compliancePolicy: 'warn', containerized: false, dockerAddress: 'unix:///var/run/docker.sock', gracePeriodDays: 15, ignoreImageBuildTime: false, image: 'ocd-cloud-lyon:latest', key: '', logLevel: 'true', policy: 'warn', requirePackageUpdate: true, timeout: 10
 		}
-	}*/
+	}
 	     /*stage('Scan image'){
 		steps{
       			//aquaMicroscanner imageName: 'ocd-cloud-lyon', notCompliesCmd: '', onDisallowed: 'ignore', outputFormat: 'html'
