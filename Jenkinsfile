@@ -119,11 +119,11 @@
 		}
 	}*/
 	
-	stage ('Deploy Validation'){
+	/*stage ('Deploy Validation'){
 		steps{
 			//error 'deploy failed'
 		}
-	}
+	}*/
 	
     }
 }
