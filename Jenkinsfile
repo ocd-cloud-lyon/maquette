@@ -95,10 +95,7 @@
 	//Suppression de l'image
 	stage ('delete docker image'){
 		steps{
-			bash '''
-                        #!/bin/bash
-                        docker image rm ocd-cloud-lyon -f
-                        '''
+		      sh "docker images"
 		}
 	}
          stage('deploy') {
