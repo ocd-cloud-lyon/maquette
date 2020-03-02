@@ -60,18 +60,18 @@
         }
 	
 	//attendre un peu que l'image soit dispo
-	stage ('wait 30s'){
+	/*stage ('wait 30s'){
 		steps{
 			sleep 30
 		}
-	}
+	}*/
 	     
 	     
-	stage ('Scan_prisma'){
+	/*stage ('Scan_prisma'){
 		steps{
 			twistlockScan ca: '', cert: '', compliancePolicy: 'warn', containerized: false, dockerAddress: 'unix:///var/run/docker.sock', gracePeriodDays: 15, ignoreImageBuildTime: false, image: 'ocd-cloud-lyon:latest', key: '', logLevel: 'true', policy: 'warn', requirePackageUpdate: true, timeout: 10
 		}
-	}
+	}*/
 	     /*stage('Scan image'){
 		steps{
       			//aquaMicroscanner imageName: 'ocd-cloud-lyon', notCompliesCmd: '', onDisallowed: 'ignore', outputFormat: 'html'
@@ -113,11 +113,11 @@
 		 }
 
         }
-	stage ('Publish_prisma'){
+	/*stage ('Publish_prisma'){
 		steps{
 			twistlockPublish ca: '', cert: '', dockerAddress: 'unix:///var/run/docker.sock', image: 'ocd-cloud-lyon', key: '', logLevel: 'true', timeout: 10
 		}
-	}
+	}*/
 	
 	stage ('Deploy Validation'){
 		steps{
