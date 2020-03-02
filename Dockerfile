@@ -1,5 +1,5 @@
 # use a base image
-FROM php:7.1-apache
+FROM php:7.2-apache
 COPY src/ /var/www/html/
 
 #mise à jour des paquets
