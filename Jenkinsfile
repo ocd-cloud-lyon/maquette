@@ -95,7 +95,9 @@
 	//Suppression de l'image
 	stage ('delete docker image'){
 		steps{
-		      sh "docker images | grep ocd "
+		      sh "docker rmi 573329840855.dkr.ecr.eu-west-3.amazonaws.com/ocd-cloud-lyon:latest"
+		      sh "docker rmi 573329840855.dkr.ecr.eu-west-3.amazonaws.com/ocd-cloud-lyon:"${env.BUILD_NUMBER}""
+		      sh "docker rmi ocd-cloud-lyon:latest"
 		}
 	}
          stage('deploy') {
