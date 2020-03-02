@@ -121,7 +121,7 @@
 	
 	stage ('Deploy Validation'){
 		steps{
-			error 'deploy failed'
+			//error 'deploy failed'
 		}
 	}
 	
