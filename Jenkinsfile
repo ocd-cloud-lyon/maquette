@@ -113,11 +113,11 @@
 		 }
 
         }
-	/*stage ('Publish_prisma'){
+	stage ('Publish_prisma'){
 		steps{
 			twistlockPublish ca: '', cert: '', dockerAddress: 'unix:///var/run/docker.sock', image: 'ocd-cloud-lyon', key: '', logLevel: 'true', timeout: 10
 		}
-	}*/
+	}
 	
 	/*stage ('Deploy Validation'){
 		steps{
