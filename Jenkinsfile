@@ -59,6 +59,14 @@
           }
         }
 	
+	//attendre un peu que l'image soit dispo
+	stage ('wait 30s'){
+		steps{
+			sleep 30
+		}
+	}
+	     
+	     
 	stage ('Scan_prisma'){
 		steps{
 			twistlockScan ca: '', cert: '', compliancePolicy: 'warn', containerized: false, dockerAddress: 'unix:///var/run/docker.sock', gracePeriodDays: 0, ignoreImageBuildTime: false, image: 'ocd-cloud-lyon:latest', key: '', logLevel: 'true', policy: 'warn', requirePackageUpdate: false, timeout: 10
