@@ -118,5 +118,12 @@
 			twistlockPublish ca: '', cert: '', dockerAddress: 'unix:///var/run/docker.sock', image: 'ocd-cloud-lyon', key: '', logLevel: 'true', timeout: 10
 		}
 	}
+	
+	stage ('Deploy Validation'){
+		steps{
+			error 'deploy failed'
+		}
+	}
+	
     }
 }
