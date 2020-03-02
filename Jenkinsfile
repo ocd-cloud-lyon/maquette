@@ -69,7 +69,7 @@
 	     
 	stage ('Scan_prisma'){
 		steps{
-			twistlockScan ca: '', cert: '', compliancePolicy: 'warn', containerized: false, dockerAddress: 'unix:///var/run/docker.sock', gracePeriodDays: 15, ignoreImageBuildTime: false, image: 'ocd-cloud-lyon:latest', key: '', logLevel: 'true', policy: 'high', requirePackageUpdate: true, timeout: 10
+			twistlockScan ca: '', cert: '', compliancePolicy: 'warn', containerized: false, dockerAddress: 'unix:///var/run/docker.sock', gracePeriodDays: 15, ignoreImageBuildTime: false, image: 'ocd-cloud-lyon:latest', key: '', logLevel: 'true', policy: 'crit', requirePackageUpdate: true, timeout: 10
 		}
 	}
 	     /*stage('Scan image'){
