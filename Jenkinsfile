@@ -95,7 +95,7 @@
 	//Suppression de l'image
 	stage ('delete docker image'){
 		steps{
-		      sh "docker images"
+		      sh "docker images | grep ocd "
 		}
 	}
          stage('deploy') {
