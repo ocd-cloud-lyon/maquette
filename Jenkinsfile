@@ -111,14 +111,8 @@
 			 }*/
 			 kubernetesDeploy configs: 'deploy-app.yaml', kubeConfig: [path: ''], kubeconfigId: 'K8S-config', secretName: 'ecr:eu-west-3:aws-ecr-credential', ssh: [sshCredentialsId: '*', sshServer: ''], textCredentials: [certificateAuthorityData: '', clientCertificateData: '', clientKeyData: '', serverUrl: 'https://']
 			 kubernetesDeploy configs: 'deploy-svc.yaml', kubeConfig: [path: ''], kubeconfigId: 'K8S-config', secretName: 'ecr:eu-west-3:aws-ecr-credential', ssh: [sshCredentialsId: '*', sshServer: ''], textCredentials: [certificateAuthorityData: '', clientCertificateData: '', clientKeyData: '', serverUrl: 'https://']
-		 
-			
-			 
-		 }
-		 steps {
-			 //retrieve service LB name
-			LB_NAME = sh (script: ' kubectl get svc hello-you-svc -o jsonpath="{..hostname}" | cut -d- -f2',returnStdout: true).trim()
-			echo "nom du LB: ${LB_NAME}" 
+		 	 LB_NAME = sh (script: ' kubectl get svc hello-you-svc -o jsonpath="{..hostname}" | cut -d- -f2',returnStdout: true).trim()
+			 echo "nom du LB: ${LB_NAME}" 	 
 		 }
 
         }
