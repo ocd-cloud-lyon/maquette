@@ -35,8 +35,8 @@
         NameSpace = 'hello-you-ns'
 		DeployName = 'hello-you-deploy'
 		ServiceName = 'hello-you-srv'
-		RuningImageBuild = '0'
-		TargetImageBuild = '0'
+		//RuningImageBuild = '0'
+		//TargetImageBuild = '0'
     }
 
     agent any
@@ -120,7 +120,7 @@
 			sleep 30
 			script {
                 withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'kubeconfig-file', namespace: '', serverUrl: '') {
-                    RuningImageBuild = sh (script: 'kubectl get pods --all-namespaces -o jsonpath="{..image}" -l app=hello-you |tr -s "[[:space:]]" "\n" | uniq -c | cut -d: -f2 | cut -b 1-3', returnStdout: true)
+                    env.RuningImageBuild = sh (script: 'kubectl get pods --all-namespaces -o jsonpath="{..image}" -l app=hello-you |tr -s "[[:space:]]" "\n" | uniq -c | cut -d: -f2 | cut -b 1-3', returnStdout: true)
                 }
             }
 		}
@@ -128,13 +128,10 @@
     }
 
 	stage('Debug'){
-		steps{
-			//script {
-				TargetImageBuild = "${BUILD_NUMBER}"
-				echo "voici la variable env.BUILD_NUMBER : ${BUILD_NUMBER}"
-				echo "et voici la variable RuningImageBuild : ${RuningImageBuild}"
-				echo "et voici la variable TargetImageBuild : ${TargetImageBuild}"
-			//}
+		steps {
+			echo "voici la variable env.BUILD_NUMBER : ${env.BUILD_NUMBER}"
+			echo "et voici la variable env.RuningImageBuild : ${env.RuningImageBuild}"
+			//echo "et voici la variable TargetImageBuild : ${TargetImageBuild}"	
 		}
 	}
 
@@ -142,7 +139,7 @@
 	stage('Compare TO '){
 		steps{
 			script {
-                if (TargetImageBuild == $RuningImageBuild ) {
+                if (env.RuningImageBuild == "${env.BUILD_NUMBER}" ) {
                 	echo "Build successfull"
                 } else {
                 	echo "Build failed"
