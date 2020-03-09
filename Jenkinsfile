@@ -107,7 +107,7 @@
 	stage('Debug'){
 		steps{
 			script {
-				echo ${env.BUILD_NUMBER}
+				echo "voici la variable env.BUILD_NUMBER : ${env.BUILD_NUMBER}""
 			}
 		}
 	}
