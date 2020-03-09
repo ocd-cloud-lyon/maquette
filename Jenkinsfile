@@ -139,7 +139,7 @@
 	stage('Compare TO '){
 		steps{
 			script {
-                if (RuningImageBuild == "${env.BUILD_NUMBER}" ) {
+                if ("$RuningImageBuild" == "${env.BUILD_NUMBER}" ) {
                 	echo "Build successfull"
                 } else {
                 	echo "Build failed"
