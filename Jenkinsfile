@@ -120,23 +120,17 @@
                 withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'kubeconfig-file', namespace: '', serverUrl: '') {
                     RuningImageBuild = sh (script: 'kubectl get pods --all-namespaces -o jsonpath="{..image}" -l app=hello-you |tr -s "[[:space:]]" "\n" | uniq -c | cut -d: -f2', returnStdout: true)
                 }
+                
+                if (env.BUILD_NUMBER == ${RuningImageBuild} ) {
+                	echo "Build successfull"
+                } else {
+                	echo "Build failed"
+                }
             }
 		}
 
     }
-    
-    stage('validate_deploy'){
-    	steps {
-    		switch(RuningImageBuild) {
-       			case ${env.BUILD_NUMBER}:
-       				echo "Build successfull"
-       			break
-       			default :
-       				echo "Build failed"
-       			break
-       		}
-    	}
-    }
+
 	
 	/*stage ('Publish_prisma'){
 		steps{
