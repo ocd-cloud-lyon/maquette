@@ -105,8 +105,10 @@
 	}
 
 	stage('Debug'){
-		script {
-			echo ${env.BUILD_NUMBER}
+		steps{
+			script {
+				echo ${env.BUILD_NUMBER}
+			}
 		}
 	}
     
