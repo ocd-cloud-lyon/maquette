@@ -121,12 +121,6 @@
                 withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'kubeconfig-file', namespace: '', serverUrl: '') {
                     RuningImageBuild = sh (script: 'kubectl get pods --all-namespaces -o jsonpath="{..image}" -l app=hello-you |tr -s "[[:space:]]" "\n" | uniq -c | cut -d: -f2', returnStdout: true)
                 }
-                
-                if (env.BUILD_NUMBER == RuningImageBuild ) {
-                	echo "Build successfull"
-                } else {
-                	echo "Build failed"
-                }
             }
 		}
 
@@ -137,6 +131,19 @@
 			script {
 				echo "voici la variable env.BUILD_NUMBER : ${env.BUILD_NUMBER}"
 				echo "et voici la variable RuningImageBuild : ${RuningImageBuild}"
+			}
+		}
+	}
+
+
+	stage('Compare TO '){
+		steps{
+			script {
+                if (env.BUILD_NUMBER == RuningImageBuild ) {
+                	echo "Build successfull"
+                } else {
+                	echo "Build failed"
+                }
 			}
 		}
 	}
