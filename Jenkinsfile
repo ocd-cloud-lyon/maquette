@@ -122,7 +122,7 @@
                     RuningImageBuild = sh (script: 'kubectl get pods --all-namespaces -o jsonpath="{..image}" -l app=hello-you |tr -s "[[:space:]]" "\n" | uniq -c | cut -d: -f2', returnStdout: true)
                 }
                 
-                if (env.BUILD_NUMBER == RuningImageBuild ) {
+                if (${env.BUILD_NUMBER} == ${RuningImageBuild} ) {
                 	echo "Build successfull"
                 } else {
                 	echo "Build failed"
