@@ -137,11 +137,15 @@
 
 
 	stage('Compare TO '){
-		when { RuningImageBuild env.BUILD_NUMBER }
-   			steps { 
-        			echo "C'est les mêmes" 
-   			}
-
+		steps{
+			script {
+                if (toString(env.BUILD_NUMBER) == toString(RuningImageBuild) ) {
+                	echo "Build successfull"
+                } else {
+                	echo "Build failed"
+                }
+			}
+		}
 	}
 
 	
