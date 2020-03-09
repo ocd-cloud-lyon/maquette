@@ -142,7 +142,7 @@
 	stage('Compare TO '){
 		steps{
 			script {
-                if (RuningImageBuild.toString() == TargetImageBuild.toString() ) {
+                if (TargetImageBuild == "${RuningImageBuild}" ) {
                 	echo "Build successfull"
                 } else {
                 	echo "Build failed"
