@@ -108,6 +108,7 @@
 		steps{
 			script {
 				echo "voici la variable env.BUILD_NUMBER : ${env.BUILD_NUMBER}"
+				echo "et voici la variable RunningImageBuild : ${RuningImageBuild}"
 			}
 		}
 	}
