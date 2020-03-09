@@ -4,16 +4,19 @@ agent any
 environment {
     myelbName = "ELB"
     myelbIP = 'toto,tata'
+    myImageVersion = 1
 }
 stages {
-    stage('Getting elb') {
+    stage('Getting input') {
         steps {
             script{
                 withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'kubeconfig-file', namespace: '', serverUrl: '') {
                     myelbName = sh (script: 'kubectl get svc hello-you-svc -o jsonpath="{..hostname}" | cut -d- -f2', returnStdout: true)
+                    myImageVersion = sh (script: 'kubectl get pods --all-namespaces -o jsonpath="{..image}" -l app=hello-you |tr -s "[[:space:]]" "\n" | uniq -c | cut -d: -f2', returnStdout: true)
                 }
             }
             echo "nom de ELB: $myelbName"
+            echo "Prod image version: $myImageVersion"
             
         }
     }
