@@ -35,7 +35,8 @@
         NameSpace = 'hello-you-ns'
 		DeployName = 'hello-you-deploy'
 		ServiceName = 'hello-you-srv'
-		RuningImageBuild = 0
+		RuningImageBuild = "0"
+		TargetImageBuild = "0"
     }
 
     agent any
@@ -129,11 +130,10 @@
 	stage('Debug'){
 		steps{
 			script {
+				TargetImageBuild = "${env.BUILD_NUMBER}"
 				echo "voici la variable env.BUILD_NUMBER : ${env.BUILD_NUMBER}"
 				echo "et voici la variable RuningImageBuild : ${RuningImageBuild}"
-				RuningImageBuild = "${RuningImageBuild}"
-				echo "voici la variable env.BUILD_NUMBER : ${env.BUILD_NUMBER}"
-				echo "et voici la variable RuningImageBuild : ${RuningImageBuild}"
+				echo "et voici la variable TargetImageBuild : ${TargetImageBuild}"
 			}
 		}
 	}
@@ -142,7 +142,7 @@
 	stage('Compare TO '){
 		steps{
 			script {
-                if (RuningImageBuild.toString() == env.BUILD_NUMBER.toString() ) {
+                if (RuningImageBuild.toString() == TargetImageBuild.toString() ) {
                 	echo "Build successfull"
                 } else {
                 	echo "Build failed"
