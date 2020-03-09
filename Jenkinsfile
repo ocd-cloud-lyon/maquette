@@ -116,7 +116,7 @@
 			kubernetesDeploy configs: 'deploy-svc.yaml', kubeConfig: [path: ''], kubeconfigId: 'K8S-config', secretName: 'ecr:eu-west-3:aws-ecr-credential', ssh: [sshCredentialsId: '*', sshServer: ''], textCredentials: [certificateAuthorityData: '', clientCertificateData: '', clientKeyData: '', serverUrl: 'https://']
 			
 			//validate deployement
-			//sleep 30
+			sleep 30
 			script {
                 withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'kubeconfig-file', namespace: '', serverUrl: '') {
                     RuningImageBuild = sh (script: 'kubectl get pods --all-namespaces -o jsonpath="{..image}" -l app=hello-you |tr -s "[[:space:]]" "\n" | uniq -c | cut -d: -f2', returnStdout: true)
@@ -139,7 +139,7 @@
 	stage('Compare TO '){
 		steps{
 			script {
-                if (RuningImageBuild == "104") {
+                if (RuningImageBuild == "105") {
                 	echo "Build successfull"
                 } else {
                 	echo "Build failed"
