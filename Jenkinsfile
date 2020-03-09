@@ -131,7 +131,7 @@
 			script {
 				echo "voici la variable env.BUILD_NUMBER : ${env.BUILD_NUMBER}"
 				echo "et voici la variable RuningImageBuild : ${RuningImageBuild}"
-				RuningImageBuild = "${env.BUILD_NUMBER}"
+				RuningImageBuild = "${RuningImageBuild}"
 				echo "voici la variable env.BUILD_NUMBER : ${env.BUILD_NUMBER}"
 				echo "et voici la variable RuningImageBuild : ${RuningImageBuild}"
 			}
