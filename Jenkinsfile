@@ -142,7 +142,7 @@
 	stage('Compare TO '){
 		steps{
 			script {
-                if (RuningImageBuild.toInteger() == TargetImageBuild ) {
+                if (RuningImageBuild.toInteger() == env.BUILD_NUMBER ) {
                 	echo "Build successfull"
                 } else {
                 	echo "Build failed"
