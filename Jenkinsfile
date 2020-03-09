@@ -27,17 +27,18 @@
      // Some global default variables
     environment {
         //registry = "bvarnet/maquette-v1-dev"
-	registry = "https://573329840855.dkr.ecr.eu-west-3.amazonaws.com"
+		registry = "https://573329840855.dkr.ecr.eu-west-3.amazonaws.com"
         //registryCredential = 'docker-hub-credentials'
-	registryCredential = 'ecr:eu-west-3:aws-ecr-credential'
+		registryCredential = 'ecr:eu-west-3:aws-ecr-credential'
         dockerImage = ''
         NomProjet = 'hello-you'
         NameSpace = 'hello-you-ns'
-	DeployName = 'hello-you-deploy'
-	ServiceName = 'hello-you-srv'
+		DeployName = 'hello-you-deploy'
+		ServiceName = 'hello-you-srv'
+		RuningImageBuild = 0
     }
 
-     agent any
+    agent any
 
     // Pipeline stages
      stages {
@@ -50,14 +51,13 @@
 
         }
 
-        stage('Build image') {
-          steps{
-            script {
-              //dockerImage = docker.build registry + ":$BUILD_NUMBER"
-		docker.build('ocd-cloud-lyon')
+    stage('Build image') {
+    	steps {
+        	script {
+				docker.build('ocd-cloud-lyon')
             }
-          }
         }
+    }
 	
 	//attendre un peu que l'image soit dispo
 	/*stage ('wait 30s'){
@@ -73,25 +73,26 @@
 			twistlockPublish ca: '', cert: '', dockerAddress: 'unix:///var/run/docker.sock', image: 'ocd-cloud-lyon', key: '', logLevel: 'true', timeout: 10
 		}
 	}
-	     /*stage('Scan image'){
+
+	/*stage('Scan_Aqua'){
 		steps{
-      			//aquaMicroscanner imageName: 'ocd-cloud-lyon', notCompliesCmd: '', onDisallowed: 'ignore', outputFormat: 'html'
+      		//aquaMicroscanner imageName: 'ocd-cloud-lyon', notCompliesCmd: '', onDisallowed: 'ignore', outputFormat: 'html'
 			//aqua customFlags: '', hideBase: false, hostedImage: '', localImage: 'sma-maquette', locationType: 'local', notCompliesCmd: '', onDisallowed: 'ignore', policies: '', register: false, registry: '', showNegligible: false
 		}
-        }*/
+    }*/
     
-        stage('Push Image') {
-          steps{
+    stage('Push Image') {
+    	steps{
             script {
               //docker.withRegistry( '', registryCredential ) {
               //  dockerImage.push()
-		docker.withRegistry(registry, registryCredential) {
-    		docker.image('ocd-cloud-lyon').push('latest')
-		docker.image('ocd-cloud-lyon').push("${env.BUILD_NUMBER}")
-              }
-            }
-          }
+				docker.withRegistry(registry, registryCredential) {
+    				docker.image('ocd-cloud-lyon').push('latest')
+					docker.image('ocd-cloud-lyon').push("${env.BUILD_NUMBER}")
+            	}
+           	}
         }
+ 	}
 	     
 	//Suppression de l'image
 	stage ('delete docker image'){
@@ -101,29 +102,43 @@
 		      sh "docker rmi ocd-cloud-lyon:latest"
 		}
 	}
-         stage('deploy') {
-		 steps {
+    
+    stage('deploy') {
+		steps {
 			 /*script {
 				 // deploiment en un coup dans le namespace default
 				 sh ("/usr/local/bin/helm upgrade --install ${NomProjet} ./hello-you --set image.version=${BUILD_NUMBER}")
 				 // deploiment en un coup dans le namespace NameSpace
 				 //sh ("/usr/local/bin/helm upgrade --install ${NomProjet} ./hello-you --namespace ${NameSpace} --set image.version=${BUILD_NUMBER}")
 			 }*/
-			 kubernetesDeploy configs: 'deploy-app.yaml', kubeConfig: [path: ''], kubeconfigId: 'K8S-config', secretName: 'ecr:eu-west-3:aws-ecr-credential', ssh: [sshCredentialsId: '*', sshServer: ''], textCredentials: [certificateAuthorityData: '', clientCertificateData: '', clientKeyData: '', serverUrl: 'https://']
-			 kubernetesDeploy configs: 'deploy-svc.yaml', kubeConfig: [path: ''], kubeconfigId: 'K8S-config', secretName: 'ecr:eu-west-3:aws-ecr-credential', ssh: [sshCredentialsId: '*', sshServer: ''], textCredentials: [certificateAuthorityData: '', clientCertificateData: '', clientKeyData: '', serverUrl: 'https://']
-			 script {
-				 //def LB_NAME = sh(script: 'kubectl get svc hello-you-svc -o jsonpath="{..hostname}" | cut -d- -f2', returnStdout: true)
-				 LB_NAME = sh(script: ' kubectl get service hello-you-svc -o jsonpath="{..hostname}" | cut -d- -f2',returnStdout: true).trim()
-			 }
-			 echo "nom du LB: ${LB_NAME}" 	 
-		 }
+			kubernetesDeploy configs: 'deploy-app.yaml', kubeConfig: [path: ''], kubeconfigId: 'K8S-config', secretName: 'ecr:eu-west-3:aws-ecr-credential', ssh: [sshCredentialsId: '*', sshServer: ''], textCredentials: [certificateAuthorityData: '', clientCertificateData: '', clientKeyData: '', serverUrl: 'https://']
+			kubernetesDeploy configs: 'deploy-svc.yaml', kubeConfig: [path: ''], kubeconfigId: 'K8S-config', secretName: 'ecr:eu-west-3:aws-ecr-credential', ssh: [sshCredentialsId: '*', sshServer: ''], textCredentials: [certificateAuthorityData: '', clientCertificateData: '', clientKeyData: '', serverUrl: 'https://']
+			
+			//validate deployement
+			sleep 15
+			script {
+                withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'kubeconfig-file', namespace: '', serverUrl: '') {
+                    RuningImageBuild = sh (script: 'kubectl get pods --all-namespaces -o jsonpath="{..image}" -l app=hello-you |tr -s "[[:space:]]" "\n" | uniq -c | cut -d: -f2', returnStdout: true)
+                }
+            }
+       		switch(RuningImageBuild) {
+       			case ${env.BUILD_NUMBER}:
+       				echo "Build successfull"
+       			break
+       			default :
+       				echo "Build failed"
+       			break
+       		}
+		
+		}
 
-        }
-	stage ('Publish_prisma'){
+    }
+	
+	/*stage ('Publish_prisma'){
 		steps{
 			twistlockPublish ca: '', cert: '', dockerAddress: 'unix:///var/run/docker.sock', image: 'ocd-cloud-lyon', key: '', logLevel: 'true', timeout: 10
 		}
-	}
+	}/*
 	
 	/*stage ('Deploy Validation'){
 		steps{
