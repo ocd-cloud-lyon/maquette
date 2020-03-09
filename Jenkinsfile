@@ -120,7 +120,7 @@
 			sleep 30
 			script {
                 withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'kubeconfig-file', namespace: '', serverUrl: '') {
-                    RuningImageBuild = sh (script: 'kubectl get pods --all-namespaces -o jsonpath="{..image}" -l app=hello-you |tr -s "[[:space:]]" "\n" | uniq -c | cut -d: -f2 | cut -b 1-3', returnStdout: true)
+                    RuningImageBuild = sh (script: 'kubectl get pods --all-namespaces -o jsonpath="{..image}" -l app=hello-you |tr -s "[[:space:]]" "\n" | uniq -c | cut -d: -f2', returnStdout: true)
                 }
             }
 		}
@@ -142,7 +142,7 @@
 	stage('Compare TO '){
 		steps{
 			script {
-                if (RuningImageBuild.toInteger() == env.BUILD_NUMBER ) {
+                if (RuningImageBuild.toInteger() == TargetImageBuild ) {
                 	echo "Build successfull"
                 } else {
                 	echo "Build failed"
