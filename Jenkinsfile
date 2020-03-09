@@ -121,7 +121,13 @@
                     RuningImageBuild = sh (script: 'kubectl get pods --all-namespaces -o jsonpath="{..image}" -l app=hello-you |tr -s "[[:space:]]" "\n" | uniq -c | cut -d: -f2', returnStdout: true)
                 }
             }
-       		switch(RuningImageBuild) {
+		}
+
+    }
+    
+    stage('validate_deploy'){
+    	steps {
+    		switch(RuningImageBuild) {
        			case ${env.BUILD_NUMBER}:
        				echo "Build successfull"
        			break
@@ -129,9 +135,7 @@
        				echo "Build failed"
        			break
        		}
-		
-		}
-
+    	}
     }
 	
 	/*stage ('Publish_prisma'){
