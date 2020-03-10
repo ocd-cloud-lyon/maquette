@@ -47,9 +47,11 @@
             /* Let's make sure we have the repository cloned to our workspace */
              steps {
                 //checkout scm
-		git credentialsId: 'github-credential', url: 'https://github.com/ocd-cloud-lyon/maquette/'
-		FAILED_STAGE=env.STAGE_NAME
-		echo "Clone repository"
+				script{
+					FAILED_STAGE=env.STAGE_NAME
+					echo "Clone repository"
+				}
+				git credentialsId: 'github-credential', url: 'https://github.com/ocd-cloud-lyon/maquette/'
              }
 
         }
@@ -57,22 +59,24 @@
 	    stage('Build image') {
 	    	steps {
 	        	script {
-					docker.build('ocd-cloud-lyon')
-							FAILED_STAGE=env.STAGE_NAME
-							echo "Build image"
+					FAILED_STAGE=env.STAGE_NAME
+					echo "Build image"
+					docker.build('ocd-cloud-lyon')		
 	            }
 	        }
 	    }
      
 	     
 		stage ('Scan_prisma'){
-			steps{
+			steps {
+				script { 
+					FAILED_STAGE=env.STAGE_NAME
+					echo "Scan Prisma"
+				}
 				twistlockScan ca: '', cert: '', compliancePolicy: 'warn', containerized: false, dockerAddress: 'unix:///var/run/docker.sock', gracePeriodDays: 15, ignoreImageBuildTime: true, image: 'ocd-cloud-lyon', key: '', logLevel: 'true', policy: 'high', requirePackageUpdate: true, timeout: 10
 				echo "scan completed"
 				twistlockPublish ca: '', cert: '', dockerAddress: 'unix:///var/run/docker.sock', image: 'ocd-cloud-lyon', key: '', logLevel: 'true', timeout: 10
 				echo "published completed"
-				FAILED_STAGE=env.STAGE_NAME
-				echo "Scan Prisma"
 			}
 		}
 
@@ -88,11 +92,11 @@
 	            script {
 	              //docker.withRegistry( '', registryCredential ) {
 	              //  dockerImage.push()
+					FAILED_STAGE=env.STAGE_NAME
+					echo "Push Image"
 					docker.withRegistry(registry, registryCredential) {
 	    				docker.image('ocd-cloud-lyon').push('latest')
 						docker.image('ocd-cloud-lyon').push("${env.BUILD_NUMBER}")
-						FAILED_STAGE=env.STAGE_NAME
-						echo "Push Image"
 	            	}
 	           	}
 	        }
