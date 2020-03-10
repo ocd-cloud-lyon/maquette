@@ -126,6 +126,8 @@
                     RuningImageBuild = sh (script: 'kubectl get pods --all-namespaces -o jsonpath="{..image}" -l app=hello-you --field-selector=status.phase=Running |tr -s "[[:space:]]" "\n" | uniq -c | cut -d: -f2', returnStdout: true)
                 
                 }
+                TargetImageBuild = env.BUILD_NUMBER.toInteger()
+
                 if (RuningImageBuild.toInteger() == TargetImageBuild ) {
                 	echo "Build successfull"
                 } else {
