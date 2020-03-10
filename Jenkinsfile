@@ -145,7 +145,7 @@
 	    }
 	}
     post {
-        successfull {
+        success {
         	echo "Build successfull"
         }
         failure {
