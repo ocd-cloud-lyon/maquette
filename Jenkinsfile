@@ -124,35 +124,19 @@
                 withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'kubeconfig-file', namespace: '', serverUrl: '') {
                     //RuningImageBuild = sh (script: 'kubectl get pods --all-namespaces -o jsonpath="{..image}" -l app=hello-you |tr -s "[[:space:]]" "\n" | uniq -c | cut -d: -f2', returnStdout: true)
                     RuningImageBuild = sh (script: 'kubectl get pods --all-namespaces -o jsonpath="{..image}" -l app=hello-you --field-selector=status.phase=Running |tr -s "[[:space:]]" "\n" | uniq -c | cut -d: -f2', returnStdout: true)
+                
+                }
+                if (RuningImageBuild.toInteger() == TargetImageBuild ) {
+                	echo "Build successfull"
+                } else {
+                	echo "Build failed"
+                	error 'deploy failed'
                 }
             }
 		}
 
     }
 
-	stage('Debug'){
-		steps {
-			script {
-				TargetImageBuild = env.BUILD_NUMBER.toInteger()
-			}
-			echo "voici la variable env.BUILD_NUMBER : ${env.BUILD_NUMBER}"
-			echo "et voici la variable env.RuningImageBuild : ${RuningImageBuild}"
-			echo "et voici la variable TargetImageBuild : ${TargetImageBuild}"	
-		}
-	}
-
-
-	stage('Compare TO '){
-		steps{
-			script {
-                if (RuningImageBuild.toInteger() == TargetImageBuild ) {
-                	echo "Build successfull"
-                } else {
-                	echo "Build failed"
-                }
-			}
-		}
-	}
 
 	
 	/*stage ('Publish_prisma'){
