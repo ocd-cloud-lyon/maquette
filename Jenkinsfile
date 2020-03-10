@@ -61,7 +61,7 @@
 	        	script {
 					FAILED_STAGE=env.STAGE_NAME
 					echo "Build image"
-					docker.build('ocd-cloud-lyon')		
+					docker.build("ocd-cloud-lyon:${env.BUILD_NUMBER}")		
 	            }
 	        }
 	    }
@@ -73,9 +73,9 @@
 					FAILED_STAGE=env.STAGE_NAME
 					echo "Scan Prisma"
 				}
-				twistlockScan ca: '', cert: '', compliancePolicy: 'warn', containerized: false, dockerAddress: 'unix:///var/run/docker.sock', gracePeriodDays: 15, ignoreImageBuildTime: true, image: 'ocd-cloud-lyon', key: '', logLevel: 'true', policy: 'high', requirePackageUpdate: true, timeout: 10
+				twistlockScan ca: '', cert: '', compliancePolicy: 'warn', containerized: false, dockerAddress: 'unix:///var/run/docker.sock', gracePeriodDays: 15, ignoreImageBuildTime: true, image: "ocd-cloud-lyon:${env.BUILD_NUMBER}", key: '', logLevel: 'true', policy: 'high', requirePackageUpdate: true, timeout: 10
 				echo "scan completed"
-				twistlockPublish ca: '', cert: '', dockerAddress: 'unix:///var/run/docker.sock', image: 'ocd-cloud-lyon', key: '', logLevel: 'true', timeout: 10
+				twistlockPublish ca: '', cert: '', dockerAddress: 'unix:///var/run/docker.sock', image: "ocd-cloud-lyon:${env.BUILD_NUMBER}", key: '', logLevel: 'true', timeout: 10
 				echo "published completed"
 			}
 		}
@@ -145,6 +145,9 @@
 	    }
 	}
     post {
+        successfull {
+        	echo "Build successfull"
+        }
         failure {
             echo "Failed stage name: ${FAILED_STAGE}"
         }
