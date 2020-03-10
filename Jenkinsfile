@@ -82,6 +82,10 @@
 
 		/*stage('Scan_Aqua'){
 			steps{
+				script { 
+					FAILED_STAGE=env.STAGE_NAME
+					echo "Scan_Aqua"
+				}
 	      		//aquaMicroscanner imageName: 'ocd-cloud-lyon', notCompliesCmd: '', onDisallowed: 'ignore', outputFormat: 'html'
 				//aqua customFlags: '', hideBase: false, hostedImage: '', localImage: 'sma-maquette', locationType: 'local', notCompliesCmd: '', onDisallowed: 'ignore', policies: '', register: false, registry: '', showNegligible: false
 			}
@@ -90,9 +94,7 @@
 	    stage('Push Image') {
 	    	steps{
 	            script {
-	              //docker.withRegistry( '', registryCredential ) {
-	              //  dockerImage.push()
-					FAILED_STAGE=env.STAGE_NAME
+	            	FAILED_STAGE=env.STAGE_NAME
 					echo "Push Image"
 					docker.withRegistry(registry, registryCredential) {
 	    				docker.image('ocd-cloud-lyon').push('latest')
@@ -105,7 +107,11 @@
 	     
 		//Suppression de l'image
 		stage ('delete docker image'){
-			steps{
+			steps {
+			      script{
+			      	FAILED_STAGE=env.STAGE_NAME
+					echo "delete docker image"
+			      }
 			      sh "docker rmi 573329840855.dkr.ecr.eu-west-3.amazonaws.com/ocd-cloud-lyon:latest"
 			      sh "docker rmi 573329840855.dkr.ecr.eu-west-3.amazonaws.com/ocd-cloud-lyon:${env.BUILD_NUMBER}"
 			      sh "docker rmi ocd-cloud-lyon:latest"
@@ -114,12 +120,11 @@
     
 	    stage('deploy') {
 			steps {
-				 /*script {
-					 // deploiment en un coup dans le namespace default
-					 sh ("/usr/local/bin/helm upgrade --install ${NomProjet} ./hello-you --set image.version=${BUILD_NUMBER}")
-					 // deploiment en un coup dans le namespace NameSpace
-					 //sh ("/usr/local/bin/helm upgrade --install ${NomProjet} ./hello-you --namespace ${NameSpace} --set image.version=${BUILD_NUMBER}")
-				 }*/
+				script{
+			      	FAILED_STAGE=env.STAGE_NAME
+					echo "delete docker image"
+			    }
+
 				kubernetesDeploy configs: 'deploy-app.yaml', kubeConfig: [path: ''], kubeconfigId: 'K8S-config', secretName: 'ecr:eu-west-3:aws-ecr-credential', ssh: [sshCredentialsId: '*', sshServer: ''], textCredentials: [certificateAuthorityData: '', clientCertificateData: '', clientKeyData: '', serverUrl: 'https://']
 				kubernetesDeploy configs: 'deploy-svc.yaml', kubeConfig: [path: ''], kubeconfigId: 'K8S-config', secretName: 'ecr:eu-west-3:aws-ecr-credential', ssh: [sshCredentialsId: '*', sshServer: ''], textCredentials: [certificateAuthorityData: '', clientCertificateData: '', clientKeyData: '', serverUrl: 'https://']
 				
@@ -137,7 +142,7 @@
 	                	echo "Build successfull"
 	                } else {
 	                	echo "Build failed"
-	                	//error 'deploy failed'
+	                	error 'deploy failed'
 	                }
 	            }
 			}
@@ -147,9 +152,11 @@
     post {
         success {
         	echo "Build successfull"
+        	slackSend channel: '#général', message: "Build ${env.BUILD_NUMBER} successfull"
         }
         failure {
             echo "Failed stage name: ${FAILED_STAGE}"
+            slackSend channel: '#général', message: "Build ${env.BUILD_NUMBER} Failed at stage ${FAILED_STAGE} please visit Jenkins at  ${BUILD_URL}"
         }
     }
 	
