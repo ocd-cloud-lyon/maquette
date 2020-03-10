@@ -74,9 +74,12 @@
 					echo "Scan Prisma"
 				}
 				twistlockScan ca: '', cert: '', compliancePolicy: 'warn', containerized: false, dockerAddress: 'unix:///var/run/docker.sock', gracePeriodDays: 15, ignoreImageBuildTime: true, image: 'ocd-cloud-lyon:latest', key: '', logLevel: 'true', policy: 'high', requirePackageUpdate: false, timeout: 10
+				script {
+					Prisma_Scan_done = 1
+				}
 				echo "scan completed"
-				twistlockPublish ca: '', cert: '', dockerAddress: 'unix:///var/run/docker.sock', image: 'ocd-cloud-lyon:latest', key: '', logLevel: 'true', timeout: 10
-				echo "published completed"
+				//twistlockPublish ca: '', cert: '', dockerAddress: 'unix:///var/run/docker.sock', image: 'ocd-cloud-lyon:latest', key: '', logLevel: 'true', timeout: 10
+				//echo "published completed"
 			}
 		}
 
@@ -151,6 +154,16 @@
 	    }
 	}
     post {
+        always {
+        	script {
+        		if (Prisma_Scan_done == 1){
+        			echo "scan realiser maintenant on pousse les resultats"
+        			script {
+        				twistlockPublish ca: '', cert: '', dockerAddress: 'unix:///var/run/docker.sock', image: 'ocd-cloud-lyon:latest', key: '', logLevel: 'true', timeout: 10
+        			}
+        		}
+        	}
+        }
         success {
         	echo "Build successfull"
         	slackSend channel: '#général', message: "Build ${env.BUILD_NUMBER} successfull"
