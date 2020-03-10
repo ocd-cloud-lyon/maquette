@@ -48,6 +48,8 @@
              steps {
                 //checkout scm
 		git credentialsId: 'github-credential', url: 'https://github.com/ocd-cloud-lyon/maquette/'
+		FAILED_STAGE=env.STAGE_NAME
+		echo "Clone repository"
              }
 
         }
@@ -56,6 +58,8 @@
     	steps {
         	script {
 				docker.build('ocd-cloud-lyon')
+						FAILED_STAGE=env.STAGE_NAME
+						echo "Build image"
             }
         }
     }
@@ -74,6 +78,8 @@
 			echo "scan completed"
 			twistlockPublish ca: '', cert: '', dockerAddress: 'unix:///var/run/docker.sock', image: 'ocd-cloud-lyon', key: '', logLevel: 'true', timeout: 10
 			echo "published completed"
+			FAILED_STAGE=env.STAGE_NAME
+			echo "Scan Prisma"
 		}
 	}
 
@@ -92,6 +98,8 @@
 				docker.withRegistry(registry, registryCredential) {
     				docker.image('ocd-cloud-lyon').push('latest')
 					docker.image('ocd-cloud-lyon').push("${env.BUILD_NUMBER}")
+					FAILED_STAGE=env.STAGE_NAME
+					echo "Push Image"
             	}
            	}
         }
@@ -139,7 +147,15 @@
 
     }
 
-
+	//Partie Alerting
+	stage ('Alert User'){
+		post {
+			failure {
+				echo "Failed stage name : ${FAILED_STAGE}"
+			}
+		}
+		
+	}
 	
 	/*stage ('Publish_prisma'){
 		steps{
