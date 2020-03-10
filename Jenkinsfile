@@ -130,7 +130,7 @@
                 	echo "Build successfull"
                 } else {
                 	echo "Build failed"
-                	error 'deploy failed'
+                	//error 'deploy failed'
                 }
             }
 		}
