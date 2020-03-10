@@ -1,0 +1,41 @@
+pipeline {
+
+agent any
+environment {
+    myelbName = "ELB"
+    myelbIP = '1.1.1.1'
+}
+stages {
+    stage('Getting input') {
+        steps {
+            echo "${Serv_Name}"
+            script{
+                withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'kubeconfig-file', namespace: '', serverUrl: '') {
+                    myelbName = sh (script: 'kubectl get svc hello-you-svc -o jsonpath="{..hostname}" | cut -d- -f2', returnStdout: true)
+                }
+            }
+            echo "nom de ELB: $myelbName"
+       
+        }
+    }
+    stage ('get IP'){
+        steps {
+            script {
+                echo "nom de ELB: $myelbName"
+                ELBquery="ELB $myelbName"
+                echo "$ELBquery"
+                myelbIP = sh (script: "aws ec2 describe-network-interfaces --filters Name=description,Values='$ELBquery' --query 'NetworkInterfaces[*].PrivateIpAddresses[*].PrivateIpAddress' --output text --region=eu-west-3 | tr '\n' ','", returnStdout: true)
+            }
+        }
+    }
+    stage('Print elb') {
+        steps {
+            script {
+                myelbIP.tokenize(',').each {
+                    println "Item: $it"
+                }
+            }
+        }
+    }
+}
+}
