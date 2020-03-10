@@ -157,7 +157,7 @@
         	script {
         		if (Prisma_Scan_launched == 1){
         			script {
-        				//twistlockPublish ca: '', cert: '', dockerAddress: 'unix:///var/run/docker.sock', image: 'ocd-cloud-lyon:latest', key: '', logLevel: 'true', timeout: 10
+        				twistlockPublish ca: '', cert: '', dockerAddress: 'unix:///var/run/docker.sock', image: 'ocd-cloud-lyon:latest', key: '', logLevel: 'true', timeout: 10
         				echo "scan lancé maintenant on pousse les resultats"
         			}
         		}
