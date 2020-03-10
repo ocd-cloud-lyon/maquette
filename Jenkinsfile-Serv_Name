@@ -11,7 +11,7 @@ stages {
             echo "${Serv_Name}"
             script{
                 withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'kubeconfig-file', namespace: '', serverUrl: '') {
-                    myelbName = sh (script: 'kubectl get svc hello-you-svc -o jsonpath="{..hostname}" | cut -d- -f2', returnStdout: true)
+                    myelbName = sh (script: 'kubectl get svc "${Serv_Name}" -o jsonpath="{..hostname}" | cut -d- -f2', returnStdout: true)
                 }
             }
             echo "nom de ELB: $myelbName"
