@@ -146,18 +146,11 @@
 		}
 
     }
-
-	//Partie Alerting
-	stage ('Alert User'){
-		steps{
-		post {
-			failure {
-			echo "Failed stage name : ${FAILED_STAGE}"
-		}
-			}
-		}
-		
-	}
+        post {
+        failure {
+            echo "Failed stage name: ${FAILED_STAGE}"
+        }
+    }
 	
 	/*stage ('Publish_prisma'){
 		steps{
