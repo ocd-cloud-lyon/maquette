@@ -34,7 +34,7 @@
         NomProjet = 'hello-you'
         NameSpace = 'hello-you-ns'
 		DeployName = 'hello-you-deploy'
-		ServiceName = 'hello-you-srv'
+		ServiceName = 'hello-you-svc'
 		RuningImageBuild = 0
 		TargetImageBuild = 0
     }
