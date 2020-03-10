@@ -183,6 +183,7 @@
         success {
         	echo "Build successfull"
         	slackSend channel: '#général', message: "Build ${env.BUILD_NUMBER} successfull"
+        	build job: 'Publish-Service', parameters: [string(name: 'Serv_Name', value: 'hello-you-srv')]
         }
         failure {
             echo "Failed stage name: ${FAILED_STAGE}"
