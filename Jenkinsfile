@@ -55,7 +55,7 @@
     stage('Build image') {
     	steps {
         	script {
-				docker.build('ocd-cloud-lyon')
+				docker.build("ocd-cloud-lyon:${env.BUILD_NUMBER}")
             }
         }
     }
@@ -70,7 +70,7 @@
 	     
 	stage ('Scan_prisma'){
 		steps{
-			twistlockScan ca: '', cert: '', compliancePolicy: 'warn', containerized: false, dockerAddress: 'unix:///var/run/docker.sock', gracePeriodDays: 15, ignoreImageBuildTime: true, image: 'ocd-cloud-lyon', key: '', logLevel: 'true', policy: 'high', requirePackageUpdate: true, timeout: 10
+			twistlockScan ca: '', cert: '', compliancePolicy: 'warn', containerized: false, dockerAddress: 'unix:///var/run/docker.sock', gracePeriodDays: 15, ignoreImageBuildTime: true, image: "ocd-cloud-lyon:${env.BUILD_NUMBER}", key: '', logLevel: 'true', policy: 'high', requirePackageUpdate: true, timeout: 10
 			echo "scan completed"
 			twistlockPublish ca: '', cert: '', dockerAddress: 'unix:///var/run/docker.sock', image: 'ocd-cloud-lyon', key: '', logLevel: 'true', timeout: 10
 			echo "published completed"
@@ -132,7 +132,7 @@
                 	echo "Build successfull"
                 } else {
                 	echo "Build failed"
-                	//error 'deploy failed'
+                	error 'deploy failed'
                 }
             }
 		}
