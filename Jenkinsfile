@@ -61,7 +61,8 @@
 	        	script {
 					FAILED_STAGE=env.STAGE_NAME
 					echo "Build image"
-					docker.build('ocd-cloud-lyon')		
+					docker.build('ocd-cloud-lyon')
+					BUILD_DONE = 1		
 	            }
 	        }
 	    }
@@ -116,7 +117,6 @@
 			      }
 			      sh "docker rmi 573329840855.dkr.ecr.eu-west-3.amazonaws.com/ocd-cloud-lyon:latest"
 			      sh "docker rmi 573329840855.dkr.ecr.eu-west-3.amazonaws.com/ocd-cloud-lyon:${env.BUILD_NUMBER}"
-			      sh "docker rmi ocd-cloud-lyon:latest"
 			}
 		}
     
@@ -160,6 +160,10 @@
         				twistlockPublish ca: '', cert: '', dockerAddress: 'unix:///var/run/docker.sock', image: 'ocd-cloud-lyon:latest', key: '', logLevel: 'true', timeout: 10
         				echo "scan lancé maintenant on pousse les resultats"
         			}
+        		}
+        		if (BUILD_DONE == 1 ) {
+    				echo "on efface l'image locale latest"
+    				sh "docker rmi ocd-cloud-lyon:latest"
         		}
         	}
         }
