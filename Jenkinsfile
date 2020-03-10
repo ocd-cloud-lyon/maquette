@@ -157,6 +157,4 @@
 			//error 'deploy failed'
 		}
 	}*/
-	
-    }
 }
