@@ -54,99 +54,93 @@
 
         }
 
-    stage('Build image') {
-    	steps {
-        	script {
-				docker.build('ocd-cloud-lyon')
+	    stage('Build image') {
+	    	steps {
+	        	script {
+					docker.build('ocd-cloud-lyon')
+							FAILED_STAGE=env.STAGE_NAME
+							echo "Build image"
+	            }
+	        }
+	    }
+     
+	     
+		stage ('Scan_prisma'){
+			steps{
+				twistlockScan ca: '', cert: '', compliancePolicy: 'warn', containerized: false, dockerAddress: 'unix:///var/run/docker.sock', gracePeriodDays: 15, ignoreImageBuildTime: true, image: 'ocd-cloud-lyon', key: '', logLevel: 'true', policy: 'high', requirePackageUpdate: true, timeout: 10
+				echo "scan completed"
+				twistlockPublish ca: '', cert: '', dockerAddress: 'unix:///var/run/docker.sock', image: 'ocd-cloud-lyon', key: '', logLevel: 'true', timeout: 10
+				echo "published completed"
+				FAILED_STAGE=env.STAGE_NAME
+				echo "Scan Prisma"
+			}
+		}
+
+		/*stage('Scan_Aqua'){
+			steps{
+	      		//aquaMicroscanner imageName: 'ocd-cloud-lyon', notCompliesCmd: '', onDisallowed: 'ignore', outputFormat: 'html'
+				//aqua customFlags: '', hideBase: false, hostedImage: '', localImage: 'sma-maquette', locationType: 'local', notCompliesCmd: '', onDisallowed: 'ignore', policies: '', register: false, registry: '', showNegligible: false
+			}
+	    }*/
+    
+	    stage('Push Image') {
+	    	steps{
+	            script {
+	              //docker.withRegistry( '', registryCredential ) {
+	              //  dockerImage.push()
+					docker.withRegistry(registry, registryCredential) {
+	    				docker.image('ocd-cloud-lyon').push('latest')
+						docker.image('ocd-cloud-lyon').push("${env.BUILD_NUMBER}")
 						FAILED_STAGE=env.STAGE_NAME
-						echo "Build image"
-            }
-        }
-    }
-	
-	//attendre un peu que l'image soit dispo
-	/*stage ('wait 30s'){
-		steps{
-			sleep 30
-		}
-	}*/
-	     
-	     
-	stage ('Scan_prisma'){
-		steps{
-			twistlockScan ca: '', cert: '', compliancePolicy: 'warn', containerized: false, dockerAddress: 'unix:///var/run/docker.sock', gracePeriodDays: 15, ignoreImageBuildTime: true, image: 'ocd-cloud-lyon', key: '', logLevel: 'true', policy: 'high', requirePackageUpdate: true, timeout: 10
-			echo "scan completed"
-			twistlockPublish ca: '', cert: '', dockerAddress: 'unix:///var/run/docker.sock', image: 'ocd-cloud-lyon', key: '', logLevel: 'true', timeout: 10
-			echo "published completed"
-			FAILED_STAGE=env.STAGE_NAME
-			echo "Scan Prisma"
-		}
-	}
+						echo "Push Image"
+	            	}
+	           	}
+	        }
+	 	}
 
-	/*stage('Scan_Aqua'){
-		steps{
-      		//aquaMicroscanner imageName: 'ocd-cloud-lyon', notCompliesCmd: '', onDisallowed: 'ignore', outputFormat: 'html'
-			//aqua customFlags: '', hideBase: false, hostedImage: '', localImage: 'sma-maquette', locationType: 'local', notCompliesCmd: '', onDisallowed: 'ignore', policies: '', register: false, registry: '', showNegligible: false
+	     
+		//Suppression de l'image
+		stage ('delete docker image'){
+			steps{
+			      sh "docker rmi 573329840855.dkr.ecr.eu-west-3.amazonaws.com/ocd-cloud-lyon:latest"
+			      sh "docker rmi 573329840855.dkr.ecr.eu-west-3.amazonaws.com/ocd-cloud-lyon:${env.BUILD_NUMBER}"
+			      sh "docker rmi ocd-cloud-lyon:latest"
+			}
 		}
-    }*/
     
-    stage('Push Image') {
-    	steps{
-            script {
-              //docker.withRegistry( '', registryCredential ) {
-              //  dockerImage.push()
-				docker.withRegistry(registry, registryCredential) {
-    				docker.image('ocd-cloud-lyon').push('latest')
-					docker.image('ocd-cloud-lyon').push("${env.BUILD_NUMBER}")
-					FAILED_STAGE=env.STAGE_NAME
-					echo "Push Image"
-            	}
-           	}
-        }
- 	}
+	    stage('deploy') {
+			steps {
+				 /*script {
+					 // deploiment en un coup dans le namespace default
+					 sh ("/usr/local/bin/helm upgrade --install ${NomProjet} ./hello-you --set image.version=${BUILD_NUMBER}")
+					 // deploiment en un coup dans le namespace NameSpace
+					 //sh ("/usr/local/bin/helm upgrade --install ${NomProjet} ./hello-you --namespace ${NameSpace} --set image.version=${BUILD_NUMBER}")
+				 }*/
+				kubernetesDeploy configs: 'deploy-app.yaml', kubeConfig: [path: ''], kubeconfigId: 'K8S-config', secretName: 'ecr:eu-west-3:aws-ecr-credential', ssh: [sshCredentialsId: '*', sshServer: ''], textCredentials: [certificateAuthorityData: '', clientCertificateData: '', clientKeyData: '', serverUrl: 'https://']
+				kubernetesDeploy configs: 'deploy-svc.yaml', kubeConfig: [path: ''], kubeconfigId: 'K8S-config', secretName: 'ecr:eu-west-3:aws-ecr-credential', ssh: [sshCredentialsId: '*', sshServer: ''], textCredentials: [certificateAuthorityData: '', clientCertificateData: '', clientKeyData: '', serverUrl: 'https://']
+				
+				//validate deployement
+				sleep 20
+				script {
+	                withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'kubeconfig-file', namespace: '', serverUrl: '') {
+	                    //RuningImageBuild = sh (script: 'kubectl get pods --all-namespaces -o jsonpath="{..image}" -l app=hello-you |tr -s "[[:space:]]" "\n" | uniq -c | cut -d: -f2', returnStdout: true)
+	                    RuningImageBuild = sh (script: 'kubectl get pods --all-namespaces -o jsonpath="{..image}" -l app=hello-you --field-selector=status.phase=Running |tr -s "[[:space:]]" "\n" | uniq -c | cut -d: -f2', returnStdout: true)
+	                
+	                }
+	                TargetImageBuild = env.BUILD_NUMBER.toInteger()
 
-	     
-	//Suppression de l'image
-	stage ('delete docker image'){
-		steps{
-		      sh "docker rmi 573329840855.dkr.ecr.eu-west-3.amazonaws.com/ocd-cloud-lyon:latest"
-		      sh "docker rmi 573329840855.dkr.ecr.eu-west-3.amazonaws.com/ocd-cloud-lyon:${env.BUILD_NUMBER}"
-		      sh "docker rmi ocd-cloud-lyon:latest"
-		}
+	                if (RuningImageBuild.toInteger() == TargetImageBuild ) {
+	                	echo "Build successfull"
+	                } else {
+	                	echo "Build failed"
+	                	//error 'deploy failed'
+	                }
+	            }
+			}
+
+	    }
 	}
-    
-    stage('deploy') {
-		steps {
-			 /*script {
-				 // deploiment en un coup dans le namespace default
-				 sh ("/usr/local/bin/helm upgrade --install ${NomProjet} ./hello-you --set image.version=${BUILD_NUMBER}")
-				 // deploiment en un coup dans le namespace NameSpace
-				 //sh ("/usr/local/bin/helm upgrade --install ${NomProjet} ./hello-you --namespace ${NameSpace} --set image.version=${BUILD_NUMBER}")
-			 }*/
-			kubernetesDeploy configs: 'deploy-app.yaml', kubeConfig: [path: ''], kubeconfigId: 'K8S-config', secretName: 'ecr:eu-west-3:aws-ecr-credential', ssh: [sshCredentialsId: '*', sshServer: ''], textCredentials: [certificateAuthorityData: '', clientCertificateData: '', clientKeyData: '', serverUrl: 'https://']
-			kubernetesDeploy configs: 'deploy-svc.yaml', kubeConfig: [path: ''], kubeconfigId: 'K8S-config', secretName: 'ecr:eu-west-3:aws-ecr-credential', ssh: [sshCredentialsId: '*', sshServer: ''], textCredentials: [certificateAuthorityData: '', clientCertificateData: '', clientKeyData: '', serverUrl: 'https://']
-			
-			//validate deployement
-			sleep 20
-			script {
-                withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'kubeconfig-file', namespace: '', serverUrl: '') {
-                    //RuningImageBuild = sh (script: 'kubectl get pods --all-namespaces -o jsonpath="{..image}" -l app=hello-you |tr -s "[[:space:]]" "\n" | uniq -c | cut -d: -f2', returnStdout: true)
-                    RuningImageBuild = sh (script: 'kubectl get pods --all-namespaces -o jsonpath="{..image}" -l app=hello-you --field-selector=status.phase=Running |tr -s "[[:space:]]" "\n" | uniq -c | cut -d: -f2', returnStdout: true)
-                
-                }
-                TargetImageBuild = env.BUILD_NUMBER.toInteger()
-
-                if (RuningImageBuild.toInteger() == TargetImageBuild ) {
-                	echo "Build successfull"
-                } else {
-                	echo "Build failed"
-                	//error 'deploy failed'
-                }
-            }
-		}
-
-    }
-        post {
+    post {
         failure {
             echo "Failed stage name: ${FAILED_STAGE}"
         }
