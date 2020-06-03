@@ -85,7 +85,7 @@
 							 	image: 'ocd-cloud-lyon:latest', 
 							 	key: '', 
 							 	logLevel: 'true', 
-							 	policy: 'high', 
+							 	policy: 'critical', 
 							 	requirePackageUpdate: true, 
 							 	timeout: 10
 
