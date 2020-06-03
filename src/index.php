@@ -30,7 +30,7 @@ setlocale(LC_ALL, 'fr_FR');
 echo 'Nous sommes le '. strftime('<strong>%d %B %Y</strong>, et il est <strong>%Hh%M</strong>') .'.<br />'
 
    . 'Il reste exactement <strong>'. $d_restants .' jours</strong>, <strong>'. $H_restantes .' heures</strong>,'
-   . ' <strong>'. $i_restantes .' minutes</strong> et <strong>'. $s_restantes .'s</strong> avant de boire un coup ! <:o).';
+   . ' <strong>'. $i_restantes .' minutes</strong> et <strong>'. $s_restantes .'s</strong> avant de boire des coups ! <:o).';
 
 ?>
  </body>
