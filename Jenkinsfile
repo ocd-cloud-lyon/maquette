@@ -80,7 +80,7 @@
 							 	compliancePolicy: 'warn', 
 							 	containerized: false, 
 							 	dockerAddress: 'unix:///var/run/docker.sock', 
-							 	gracePeriodDays: 15, 
+							 	gracePeriodDays: 120, 
 							 	ignoreImageBuildTime: true, 
 							 	image: 'ocd-cloud-lyon:latest', 
 							 	key: '', 
