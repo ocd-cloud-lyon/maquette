@@ -5,10 +5,10 @@
  <body>
 <?php
 $annee = date('Y');
-$noel = mktime(8, 0, 0, 03, 26, $annee);
+$noel = mktime(8, 0, 0, 06, 03, $annee);
 		
  if ($noel < time())
- $noel = mktime(8, 0, 0, 03, 26, ++$annee);
+ $noel = mktime(8, 0, 0, 06, 03, ++$annee);
 
  $tps_restant = $noel - time(); // $noel sera toujours plus grand que le timestamp actuel, vu que c'est dans le futur. ;)
 
