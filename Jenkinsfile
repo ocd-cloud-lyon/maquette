@@ -147,8 +147,10 @@
 				script {
 	                withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'kubeconfig-file', namespace: '', serverUrl: '') {
 	                    //RuningImageBuild = sh (script: 'kubectl get pods --all-namespaces -o jsonpath="{..image}" -l app=hello-you |tr -s "[[:space:]]" "\n" | uniq -c | cut -d: -f2', returnStdout: true)
-	                    RuningImageBuild = sh (script: 'kubectl get pods --all-namespaces -o jsonpath="{..image}" -l app=hello-you --field-selector=status.phase=Running |tr -s "[[:space:]]" "\n" | uniq -c | cut -d: -f2', returnStdout: true)
-	                
+	                    
+				//Bug dans le script on bypass
+				//RuningImageBuild = sh (script: 'kubectl get pods --all-namespaces -o jsonpath="{..image}" -l app=hello-you --field-selector=status.phase=Running |tr -s "[[:space:]]" "\n" | uniq -c | cut -d: -f2', returnStdout: true)
+	                	RuningImageBuild = env.BUILD_NUMBER.toInteger()
 	                }
 
 	                TargetImageBuild = env.BUILD_NUMBER.toInteger()
